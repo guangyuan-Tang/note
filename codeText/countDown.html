@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+
+ /* --------common.js-------  */
+
+/**
+* [倒计时函数] 
+* @params {String} endTime "yyyy-mm-dd hh-mm-ss / yyyy/mm/dd hh/mm/ss"
+* 
+*/
+function countDown(time) {
+  
+  let endTime = time.replace(/-/g, "/"); //ios 时间兼容处理
+  let endDate = new Date(endTime); //结束时间
+  let endMsecTime = endDate.getTime(); //结束时间毫秒数
+  let pad = function (x) { return (x < 10) ? "0" + x : x; };
+
+  var timer = setInterval(() => {
+    let nowDate = new Date(); //当前时间
+    let nowMsecTime = nowDate.getTime(); //当前时间毫秒数
+    let downTime = endMsecTime - nowMsecTime; //时间差
+    
+    if (downTime <= 0) {
+      clearInterval(timer);
+      return false;
+    }
+
+    // return {
+    //   hour: pad(Math.floor(downTime / 1000 / 60 / 60)),
+    //   minute: pad(Math.floor(downTime / 1000 / 60 % 60)),
+    //   second: pad(Math.floor(downTime / 1000 % 60)),
+    // }
+
+    console.log(
+      pad(Math.floor(downTime / 1000 / 60 / 60))+":"+
+      pad(Math.floor(downTime / 1000 / 60 % 60))+":"+
+      pad(Math.floor(downTime / 1000 % 60))
+    )
+
+  },1000);          
+}
+
+countDown("2019-06-24 12:07:10")
+
+/**
+* [时间格式化大小比较] 
+* @params {String} d1
+* @params {String} d2
+* 
+*/
+function CompareDate(d1,d2) {
+  return ((new Date(d1.replace(/-/g,"\/"))) > (new Date(d2.replace(/-/g,"\/"))));
+}
+
+//时间类比较
+// let startTime= new Date(Date.parse(starttime));
+// let endTime=new Date(Date.parse(endTime));
+// startTime>endTime
+
+//时间戳比较
+// startTime=Date.parse(starttime);
+// endTime=Date.parse(endTime);
+// startTime>endTime
+
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+  /*
+    传入一个数值，返回数值里每一个数平方后拼接的结果。
+  */
+  function squareDigits(num) {
+    return String(num).split("").map(item=>{
+      return item * item
+    }).join("")*1
+
+    // 解法2
+    return +String(num).split('').map(function(num){return +num * +num;}).join('');
+  }
+
+  console.log(squareDigits(9119))
+
+  /*
+    判断是否能合成一个三角形
+  */
+  function isTriangle(a,b,c) {
+    
+    return (a+b>c && a+c>b && b+c>a);
+
+    //解法2:
+    [a, b, c] = [a, b, c].sort((x, y) => x-y);
+    return a+b > c;
+
+    //解法3：
+    Math.max(a,b,c)<(a+b+c)/2
+
+    //解法4：
+    var max = Math.max(a, b, c);
+    return a + b + c - max > max;
+
+  }
+
+  /* 
+    去除字符串中所有空格返回字符串
+  */
+  function noSpace(x) {
+    return x.replace(/\s/g, '');
+    return x.split(' ').join('')
+  }
+
+  /*
+    您可以获得区域的起始编号和结束编号，
+    并且应该返回除了数字为5之外的所有数字的和。
+    起点和终点都包含在内！
+    起始编号始终小于结束编号。这两个数字也可以是负数！
+    1,9 -> 1,2,3,4,6,7,8,9 -> Result 8
+    4,17 -> 4,6,7,8,9,10,11,12,13,14,16,17 -> Result 12
+  */
+  function dontGiveMeFive(start, end) {
+
+    var num = 0;
+    for(var i=start; i<=end; i++){
+      if(i!=5){
+        num++
+      }
+    }
+    return num;
+  }
+
+  console.log(dontGiveMeFive(1,9))
+
+  /*
+    7kyu
+    城市公交车，函数内接收一条公车路线 [] , 路线内每个站上下车的人数都会记录在数组里
+    求到终点站时还有多少人在车上 
+    例：[10,0] 上车人数为10 人  下车人数为0 
+  */
+  function busNum (busStops){
+    // Good Luck!
+    let num = 0
+    let count = function(arr){return arr[0] - arr[1]}
+    busStops.map(item => {num += count(item)});
+    return num
+
+    //解法2：
+    const number = busStops => busStops.reduce((p,n) => p+n[0]-n[1],0)
+    const number = (busStops) => busStops.reduce((rem, [on, off]) => rem + on - off, 0);
+    return busStops.map(x => x[0] - x[1]).reduce( (x, y) => x + y);
+  }
+
+  console.log(busNum([[10,0],[3,5],[5,8]]))
+
+
+
+</script>
+</body>
+</html>
