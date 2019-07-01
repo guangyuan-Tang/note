@@ -8,35 +8,32 @@ const TIMEOUT = 5000; //请求超时延迟
 
 // 添加请求拦截器 
 axios.interceptors.request.use(config => {
+
   //默认开启loading
   if (!config.hideLoading) {
     // loading
   }
+  
   return config
 }, error => {
+  
   //关闭loading
-    return Promise.reject(error)
+  return Promise.reject(error)
+
 });
 
 // 添加响应拦截器
 axios.interceptors.response.use(response => {  
+
   // 响应成功关闭loading
   return response
+
 }, error => {
+
   // 对响应错误做点什么
   return Promise.resolve(error);
 
 });
-
-
-
-async get(url, data) {
-  return await this.request("GET", url, data);
-}
-
-async post(url, data) {
-  return await this.request("POST", url, data);
-}
 
 
 /**
@@ -48,7 +45,7 @@ async post(url, data) {
 * @returns {Promise}
 */
 
-request(method, url, params) {
+function request(method, url, params) {
 
   //参数处理
   params['_'] = Math.random();
@@ -74,6 +71,17 @@ request(method, url, params) {
     });
   })
 }
+
+
+async function get(url, data) {
+  return await request("get", url, data);
+}
+
+async function post(url, data) {
+  return await request("post", url, data);
+}
+
+
 
 
 export default {

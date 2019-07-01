@@ -20,7 +20,7 @@
     return +String(num).split('').map(function(num){return +num * +num;}).join('');
   }
 
-  console.log(squareDigits(9119))
+  // console.log(squareDigits(9119))
 
   /*
     判断是否能合成一个三角形
@@ -85,12 +85,12 @@
     return num
 
     //解法2：
-    const number = busStops => busStops.reduce((p,n) => p+n[0]-n[1],0)
-    const number = (busStops) => busStops.reduce((rem, [on, off]) => rem + on - off, 0);
+    // const number = busStops => busStops.reduce((p,n) => p+n[0]-n[1],0)
+    // const number = (busStops) => busStops.reduce((rem, [on, off]) => rem + on - off, 0);
     return busStops.map(x => x[0] - x[1]).reduce( (x, y) => x + y);
   }
 
-  console.log(busNum([[10,0],[3,5],[5,8]]))
+  // console.log(busNum([[10,0],[3,5],[5,8]]))
 
 
 
