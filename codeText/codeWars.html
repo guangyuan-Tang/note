@@ -93,6 +93,33 @@
   // console.log(busNum([[10,0],[3,5],[5,8]]))
 
 
+  /*
+    7kyu 相邻同样的元素只保留一个 
+    aaabbcccdc -> abcdc
+    
+  */
+  function abc(str) {
+    // let str = "aaabbcccdc";
+    // 判断最后一个字符串不等于当前字符串则叠加。
+    return str.split("").reduce((pre, current) => { 
+      if (pre.substr(pre.length - 1,1) != current ){
+        return pre += current
+      } else {
+        return pre
+      }
+    });
+
+    // 解法2
+    let res = "";
+    str.split("").map(item => {
+      if( (res.charAt(res.length - 1) || "") != item) {
+        res += item
+      }
+    });
+    return res;
+  }
+
+
 
 </script>
 </body>
