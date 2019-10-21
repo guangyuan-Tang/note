@@ -7,6 +7,9 @@
     <title>Document</title>
 </head>
 <body>
+
+<!-- <script src="./common.js"></script> -->
+
 <script>
   /*
     传入一个数值，返回数值里每一个数平方后拼接的结果。
@@ -69,7 +72,7 @@
     return num;
   }
 
-  console.log(dontGiveMeFive(1,9))
+  // console.log(dontGiveMeFive(1,9))
 
   /*
     7kyu
@@ -94,7 +97,7 @@
 
 
   /*
-    7kyu 相邻同样的元素只保留一个 
+    6kyu 相邻同样的元素只保留一个 
     aaabbcccdc -> abcdc
     
   */
@@ -118,6 +121,116 @@
     });
     return res;
   }
+
+
+  /*
+    6kyu  传入数组或字符串相邻同样的元素只保留一个  返回数组
+    aaabbcccdc -> [a,b,c,d,c]
+    [1,1,1,2,2,1,1] -> [1,2,1]
+  */
+
+  function uniqueInOrder (iterable){
+
+    // 解法1：
+    var res = [];
+    for (var i = 0; i < iterable.length; i++) {
+      if (iterable[i] != iterable[i+1]) res.push(iterable[i]);
+    }
+    return res;
+
+    // 解法2：
+    var result = []
+    var last
+    
+    for (var i = 0; i < it.length; i++) {
+      if (it[i] !== last) {
+        result.push(last = it[i])
+      }
+    }
+    return result
+    
+    // 解法3：
+    return [...iterable].filter((a, i) => a !== iterable[i-1]);
+
+  }
+
+  /*
+  https://www.codewars.com/kata/two-to-one/train/javascript
+    7kyu  实现一个方法longest 传入两个字符串(s1,s2)   
+    返回一个新的 #排序# 字符串，尽可能长，包含不同的字母
+    a = "xyaabbbccccdefww"
+    b = "xxxxyyyyabklmopq"
+    longest(a, b) -> "abcdefklmopqwxy"
+  */
+
+  function longest(s1, s2) {
+    // s1+s2去重后返回 
+    let aa = Array.from(new Set((s1+s2).split(""))).sort().join("");
+    console.log(aa);
+  }
+
+  // longest("xyaabbbccccdefww","xxxxyyyyabklmopq");
+
+
+  /*
+    编写一方法nameInStr 传入一字符串语句与目标单词， 判断字符串语句内   能否按顺序组成目标单词
+
+    例： 
+    nameInStr("Across the rivers", "chris") --> true
+                ^      ^  ^^   ^
+                c      h  ri   s
+
+    nameInStr("A crew that boards the ship", "chris") --> false
+                 cr    h              s i
+                 cr                h  s i  
+                 c     h      r       s i
+  */
+
+
+  function nameInStr(str, name){
+    // 裁剪字符串  获取目标字符串  的每个字符  循环比较语句
+    let strArr = str.split("");
+    let target = name.split("");
+    
+    for (let item of strArr) {
+      
+    }
+
+    // console.log(strArr,target)
+  }
+  nameInStr("Across the rivers", "chris")
+
+  /*
+    编写一个函数判断两个字符串的相似度
+    similarity(s1, s2);
+    aaaaab, bbbbba   -> xx%
+    
+  */
+
+  // 编写一个采用数组并将所有零移动到末尾的算法，同时保留其他元素的顺序。
+  function moveZeros(arr) {
+
+    // 解法1：
+    return arr.filter(function(x) {return x !== 0}).
+      concat(arr.filter(function(x) {return x === 0;}));
+
+    // 解法2：
+    for(var i = arr.length - 1; i >= 0; i--) {
+      if(arr[i] === 0) {
+        arr.splice(i, 1);
+        arr.push(0);
+      }
+    }
+    return arr;
+  }
+  // console.log(moveZeros(["a","b",null,"c","d",1,false,1,3,[],1,9,{},0,9,0,0,9,0,0,0]))
+  
+
+  // 方法返回数据区间内最大数与最小数
+  function minMax(arr){
+    return [Math.max.apply(null,arr), Math.min.apply(null, arr)]
+  }
+
 
 
 

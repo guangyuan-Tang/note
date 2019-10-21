@@ -52,13 +52,29 @@ countDown("2019-06-24 12:07:10")
 
 /**
 * [时间格式化大小比较] 
-* @params {String} d1
-* @params {String} d2
+* @params {String} d1 2019-09-05 18:03:44
+* @params {String} d2 2019-09-05 18:03:44
 * 
 */
 function CompareDate(d1,d2) {
   return ((new Date(d1.replace(/-/g,"\/"))) > (new Date(d2.replace(/-/g,"\/"))));
 }
+
+
+/**
+* [与系统当前时间比较大小] 
+* @params {String} d1 2019-09-05 18:03:44
+* @return {Boolean} 
+* 
+*/
+function isTimeBeOverdue(time) {
+  let inTime = new Date(time.replace(/-/g,"\/")).getTime();
+  let currentTime = new Date().getTime();
+  return inTime > currentTime
+}
+
+console.log(isTimeBeOverdue("2019-08-29 15:45:20"))
+
 
 //时间类比较
 // let startTime= new Date(Date.parse(starttime));

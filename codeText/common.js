@@ -90,7 +90,7 @@ function parseTime(time, cFormat) {
  * @param {string} option
  * @returns {string}
  */
-export function formatTime(time, option) {
+function formatTime(time, option) {
   if (('' + time).length === 10) {
     time = parseInt(time) * 1000
   } else {
@@ -162,3 +162,4 @@ function deepClone(obj, hash = new WeakMap()) {
    }
    return t;
 }
+
