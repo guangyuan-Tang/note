@@ -1,99 +1,793 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-  /*
-    传入一个数值，返回数值里每一个数平方后拼接的结果。
-  */
-  function squareDigits(num) {
-    return String(num).split("").map(item=>{
-      return item * item
-    }).join("")*1
 
-    // 解法2
-    return +String(num).split('').map(function(num){return +num * +num;}).join('');
-  }
+  <!-- <script src="./common.js"></script> -->
 
-  console.log(squareDigits(9119))
+  <script>
+    /*
+      传入一个数值，返回数值里每一个数平方后拼接的结果。
+    */
+    function squareDigits(num) {
+      return String(num).split("").map(item => {
+        return item * item
+      }).join("") * 1
 
-  /*
-    判断是否能合成一个三角形
-  */
-  function isTriangle(a,b,c) {
+      // 解法2
+      return +String(num).split('').map(function (num) { return +num * +num; }).join('');
+    }
+
+    // console.log(squareDigits(9119))
+
+    /*
+      判断是否能合成一个三角形
+    */
+    function isTriangle(a, b, c) {
+
+      return (a + b > c && a + c > b && b + c > a);
+
+      //解法2:
+      [a, b, c] = [a, b, c].sort((x, y) => x - y);
+      return a + b > c;
+
+      //解法3：
+      Math.max(a, b, c) < (a + b + c) / 2
+
+      //解法4：
+      var max = Math.max(a, b, c);
+      return a + b + c - max > max;
+
+    }
+
+    /* 
+      去除字符串中所有空格返回字符串
+    */
+    function noSpace(x) {
+      return x.replace(/\s/g, '');
+      return x.split(' ').join('')
+    }
+
+    /*
+      您可以获得区域的起始编号和结束编号，
+      并且应该返回除了数字为5之外的所有数字的和。
+      起点和终点都包含在内！
+      起始编号始终小于结束编号。这两个数字也可以是负数！
+      1,9 -> 1,2,3,4,6,7,8,9 -> Result 8
+      4,17 -> 4,6,7,8,9,10,11,12,13,14,16,17 -> Result 12
+    */
+    function dontGiveMeFive(start, end) {
+
+      var num = 0;
+      for (var i = start; i <= end; i++) {
+        if (i != 5) {
+          num++
+        }
+      }
+      return num;
+    }
+
+    // console.log(dontGiveMeFive(1,9))
+
+    /*
+      7kyu
+      城市公交车，函数内接收一条公车路线 [] , 路线内每个站上下车的人数都会记录在数组里
+      求到终点站时还有多少人在车上 
+      例：[10,0] 上车人数为10 人  下车人数为0 
+    */
+    function busNum(busStops) {
+      // Good Luck!
+      let num = 0
+      let count = function (arr) { return arr[0] - arr[1] }
+      busStops.map(item => { num += count(item) });
+      return num
+
+      //解法2：
+      // const number = busStops => busStops.reduce((p,n) => p+n[0]-n[1],0)
+      // const number = (busStops) => busStops.reduce((rem, [on, off]) => rem + on - off, 0);
+      return busStops.map(x => x[0] - x[1]).reduce((x, y) => x + y);
+    }
+
+    // console.log(busNum([[10,0],[3,5],[5,8]]))
+
+
+    /*
+      6kyu 相邻同样的元素只保留一个 
+      aaabbcccdc -> abcdc
+      
+    */
+    function abc(str) {
+      // let str = "aaabbcccdc";
+      // 判断最后一个字符串不等于当前字符串则叠加。
+      return str.split("").reduce((pre, current) => {
+        if (pre.substr(pre.length - 1, 1) != current) {
+          return pre += current
+        } else {
+          return pre
+        }
+      });
+
+      // 解法2
+      let res = "";
+      str.split("").map(item => {
+        if ((res.charAt(res.length - 1) || "") != item) {
+          res += item
+        }
+      });
+      return res;
+    }
+
+
+    /*
+      6kyu  传入数组或字符串相邻同样的元素只保留一个  返回数组
+      aaabbcccdc -> [a,b,c,d,c]
+      [1,1,1,2,2,1,1] -> [1,2,1]
+    */
+
+    function uniqueInOrder(iterable) {
+
+      // 解法1：
+      var res = [];
+      for (var i = 0; i < iterable.length; i++) {
+        if (iterable[i] != iterable[i + 1]) res.push(iterable[i]);
+      }
+      return res;
+
+      // 解法2：
+      var result = []
+      var last
+
+      for (var i = 0; i < it.length; i++) {
+        if (it[i] !== last) {
+          result.push(last = it[i])
+        }
+      }
+      return result
+
+      // 解法3：
+      return [...iterable].filter((a, i) => a !== iterable[i - 1]);
+
+    }
+
+    /*
+    https://www.codewars.com/kata/two-to-one/train/javascript
+      7kyu  实现一个方法longest 传入两个字符串(s1,s2)   
+      返回一个新的 #排序# 字符串，尽可能长，包含不同的字母
+      a = "xyaabbbccccdefww"
+      b = "xxxxyyyyabklmopq"
+      longest(a, b) -> "abcdefklmopqwxy"
+    */
+
+    function longest(s1, s2) {
+      // s1+s2去重后返回 
+      let aa = Array.from(new Set((s1 + s2).split(""))).sort().join("");
+      console.log(aa);
+    }
+
+    // longest("xyaabbbccccdefww","xxxxyyyyabklmopq");
+
+
+    /*
+      编写一方法nameInStr 传入一字符串语句与目标单词， 判断字符串语句内   能否按顺序组成目标单词
+  
+      例： 
+      nameInStr("Across the rivers", "chris") --> true
+                  ^      ^  ^^   ^
+                  c      h  ri   s
+  
+      nameInStr("A crew that boards the ship", "chris") --> false
+                   cr    h              s i
+                   cr                h  s i  
+                   c     h      r       s i
+    */
+
+
+    function nameInStr(str, name) {
+      // 裁剪字符串  获取目标字符串  的每个字符  循环比较语句
+      let strArr = str.split("");
+      let target = name.split("");
+
+      for (let item of strArr) {
+
+      }
+
+      // console.log(strArr,target)
+    }
+    nameInStr("Across the rivers", "chris")
+
+    /*
+      编写一个函数判断两个字符串的相似度
+      similarity(s1, s2);
+      aaaaab, bbbbba   -> xx%
+      
+    */
+
+    // 编写一个采用数组并将所有零移动到末尾的算法，同时保留其他元素的顺序。
+    function moveZeros(arr) {
+
+      // 解法1：
+      return arr.filter(function (x) { return x !== 0 }).
+        concat(arr.filter(function (x) { return x === 0; }));
+
+      // 解法2：
+      for (var i = arr.length - 1; i >= 0; i--) {
+        if (arr[i] === 0) {
+          arr.splice(i, 1);
+          arr.push(0);
+        }
+      }
+      return arr;
+    }
+    // console.log(moveZeros(["a","b",null,"c","d",1,false,1,3,[],1,9,{},0,9,0,0,9,0,0,0]))
+
+
+    // 方法返回数据区间内最大数与最小数
+    function minMax(arr) {
+      return [Math.max.apply(null, arr), Math.min.apply(null, arr)]
+    }
+
+
+
+
+    // 2019-10-22新增
+
     
-    return (a+b>c && a+c>b && b+c>a);
-
-    //解法2:
-    [a, b, c] = [a, b, c].sort((x, y) => x-y);
-    return a+b > c;
-
-    //解法3：
-    Math.max(a,b,c)<(a+b+c)/2
-
-    //解法4：
-    var max = Math.max(a, b, c);
-    return a + b + c - max > max;
-
-  }
-
-  /* 
-    去除字符串中所有空格返回字符串
+    /* 1、
+      "is2 Thi1s T4est 3a"  -->  "Thi1s is2 3a T4est"
+      "4of Fo1r pe6ople g3ood th5e the2"  -->  "Fo1r the2 g3ood 4of th5e pe6ople"
+      ""  -->  ""
   */
-  function noSpace(x) {
-    return x.replace(/\s/g, '');
-    return x.split(' ').join('')
-  }
 
-  /*
-    您可以获得区域的起始编号和结束编号，
-    并且应该返回除了数字为5之外的所有数字的和。
-    起点和终点都包含在内！
-    起始编号始终小于结束编号。这两个数字也可以是负数！
-    1,9 -> 1,2,3,4,6,7,8,9 -> Result 8
-    4,17 -> 4,6,7,8,9,10,11,12,13,14,16,17 -> Result 12
-  */
-  function dontGiveMeFive(start, end) {
+    function foo(str) {
+      if (!str) return ""
+      return str
+        .split(" ")
+        .sort((a, b) => a.match(/\d+/).join("") - b.match(/\d+/).join(""))
+        .join(" ")
+    }
 
-    var num = 0;
-    for(var i=start; i<=end; i++){
-      if(i!=5){
-        num++
+
+    /* 2、
+        如果单词的长度为奇数，则返回中间字符。如果单词的长度是偶数，则返回中间2个字符。
+        例：
+            Kata.getMiddle("test") should return "es"
+            Kata.getMiddle("testing") should return "t"
+            Kata.getMiddle("middle") should return "dd"
+            Kata.getMiddle("A") should return "A"
+    */
+
+    function getMiddle(s) {
+      // return s.substr(Math.ceil(s.length / 2 - 1), s.length % 2 === 0 ? 2 : 1);
+      // return s.substring(Math.ceil(s.length/2)-1, Math.floor(s.length/2)+1)
+      return s.slice((s.length - 1) / 2, s.length / 2 + 1);
+    }
+
+
+    /* 3、
+        一个字符串，格式为由逗号分隔的名称列表，但最后两个名称除外，这两个名称应用＆符号分隔。
+        list([ {name: 'Bart'}, {name: 'Lisa'}, {name: 'Maggie'} ])
+        // returns 'Bart, Lisa & Maggie'
+    
+        list([ {name: 'Bart'}, {name: 'Lisa'} ])
+        // returns 'Bart & Lisa'
+    
+        list([ {name: 'Bart'} ])
+        // returns 'Bart'
+    
+        list([])
+        // returns ''
+    
+        演变考题：
+            // Bart,Lisa,Maggie   ->  Bart,Lisa & Maggie
+            // Bart,Lisa,Maggie,ko   ->  Bart,Lisa,Maggie & ok
+            // Bart,Lisa,Maggie,ko,skr   ->  Bart,Lisa,Maggie,ok & skr
+    */
+
+    function list(names) {
+
+      // 解题1：
+      return names.reduce(function (prev, current, index, array) {
+        if (index === 0) {
+          return current.name;
+        }
+        else if (index === array.length - 1) {
+          return prev + ' & ' + current.name;
+        }
+        else {
+          return prev + ', ' + current.name;
+        }
+      }, '');
+
+      // 解题2：
+      var xs = names.map(p => p.name)
+      var x = xs.pop()
+      return xs.length ? xs.join(", ") + " & " + x : x || ""
+
+      // 解题3：
+      return names.map(x => x.name).join(', ').replace(/(.*),(.*)$/, "$1 &$2")
+
+      // 解题4：
+      return names
+        .map((item) => item.name)
+        .join(', ')
+        .replace(/,\s([^,]+)$/, ' & $1');
+
+    }
+
+    // console.log(list([ 
+    //     {name: 'Bart'},
+    //     {name: 'Lisa'},
+    //     {name: 'Maggie'},
+    //     {name: 'Homer'},
+    //     {name: 'Marge'} 
+    // ]))
+
+
+    /* 4、
+        digital_root(16)
+        => 1 + 6
+        => 7
+    
+        digital_root(942)
+        => 9 + 4 + 2
+        => 15 ...
+        => 1 + 5
+        => 6
+    
+        digital_root(132189)
+        => 1 + 3 + 2 + 1 + 8 + 9
+        => 24 ...
+        => 2 + 4
+        => 6
+    */
+    function digital_root(n) {
+      var total = 0;
+      n.toString().split('').map(item => {
+        total += item * 1;
+      });
+
+      if (total.toString().length >= 2) {
+        return digital_root(total)
+      } else {
+        return total;
+      }
+
+      // return (n - 1) % 9 + 1;
+      // return digital_root(n.toString().split('').reduce(function(acc, d) { return acc + +d; }, 0));
+    }
+    // console.log(digital_root(16))
+
+
+    /* 5、
+        给定一个最小4个整数数组，创建一个返回两个最低正数之和的函数。不会传递任何浮点数或空数组。
+        例如，当传递数组时[19, 5, 42, 2, 77]，输出应该是7。
+    */
+
+    function sumTwoSmallestNumbers(numbers) {
+      numbers.sort((a, b) => { return a - b })
+      return numbers[0] + numbers[1]
+    };
+    // console.log(sumTwoSmallestNumbers([10, 343445353, 3453445, 3453545353453]))
+
+
+    /* 6、
+        ATM机允许4或6位PIN码，PIN码不能包含4位数或6位数字。
+        如果函数传递了有效的PIN字符串，则返回true，否则返回false。
+        validatePIN("1234") === true
+        validatePIN("12345") === false
+        validatePIN("a234") === false
+    */
+
+    function validatePIN(pin) {
+      var reg = new RegExp(/(^\d{4}$)|(^\d{6}$)/)
+      return reg.test(pin)
+      // return /^(\d{4}|\d{6})$/.test(pin)
+    }
+    // console.log(validatePIN("-1234"))
+
+    /* 7、
+        在这个kata中，你需要给一个字符串，用字母表中的位置替换每个字母。
+        如果文本中的任何内容不是字母，请忽略它并且不返回它。
+        "a" = 1，"b" = 2 等等。
+        alphabetPosition("The sunset sets at twelve o' clock.") ->
+        "20 8 5 19 21 14 19 5 20 19 5 20 19 1 20 20 23 5 12 22 5 15 3 12 15 3 11"
+    
+        思路： 遍历传入字符串  拿到当前的字符串   indexOf取26个字母的下标 返回数字叠加
+    */
+
+    function alphabetPosition(text) {
+      var str = "abcdefghijklmnopqrstuvwsyz";
+      var num = [];
+      for (var i = 0; i < text.length; i++) {
+        if (str.indexOf(text[i].toLowerCase()) >= 0) {
+          num.push(str.indexOf(text[i].toLowerCase()) + 1)
+        }
+      }
+      return num.join(" ");
+
+      // 解法2 ：
+      return text
+        .toUpperCase()
+        .match(/[a-z]/gi)
+        .map((c) => c.charCodeAt() - 64)
+        .join(' ');
+    }
+
+    // console.log(alphabetPosition("The sunset sets at twelve o' clock."))
+
+
+    /* 8、
+        编写一种算法，以十进制格式识别有效的IPv4地址。如果IP由四个八位字节组成，其值在0和之间255，则应视为有效。
+        该函数的输入保证是单个字符串。
+        1.2.3.4
+        123.45.67.89
+    */
+
+    function isValidIP(str) {
+
+      return /^(([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])(\.(?!$)|$)){4}$/.test(str);
+
+      return str.split('.').filter(function (v) { return v == Number(v).toString() && Number(v) < 256 }).length == 4;
+    }
+
+    // console.log(isValidIP("160.248.169.242"))
+
+
+    /* 9、
+        字符串英文单词首字母大写，其余小写。
+        titleCase('a clash of KINGS', 'a an the of') // should return: 'A Clash of Kings'
+        titleCase('THE WIND IN THE WILLOWS', 'The In') // should return: 'The Wind in the Willows'
+        titleCase('the quick brown fox') // should return: 'The Quick Brown Fox'
+    */
+
+    function titleCase(title) {
+      if (!title) return ""
+      return title.toLowerCase().split(" ").map((item, index) => {
+        var str = item.slice(0, 1);
+        return item = str.toUpperCase() + item.slice(1);
+      }).join(" ")
+    }
+
+    // console.log(titleCase('aBC deF of Ghi'))
+
+
+    /* 10、
+        实现一个方法，从a数组中减去b数组里的存在的值并返回结果。
+        array_diff([1,2],[1]) => [2])
+        array_diff([1,2,2],[1]) => [2,2])
+        array_diff([1,2,2,2,3],[2]) => [1,3]
+        array_diff([1,2,8,2,3],[1,2,8]) => [3]
+        array_diff([],[4,5]) => [])
+        array_diff([4,5],[]) => [4,5])
+    */
+
+    function array_diff(a, b) {
+      return a.filter(ele => {
+        return b.indexOf(ele) < 0
+      });
+      // return a.filter(function(x) { return b.indexOf(x) == -1; });
+    }
+
+    // console.log(array_diff([4,5],[]))
+
+    /* 11、
+        编写一个函数，它以非负整数（秒）作为输入，并以人类可读的格式返回时间（HH:MM:SS）
+        HH =小时，填充到2位数，范围：00 - 99
+        MM =分钟，填充到2位数，范围：00 - 59
+        SS =秒，填充到2位数，范围：00 - 59
+        最长时间永远不会超过359999（99:59:59）
+    */
+
+    function humanReadable(seconds) {
+
+      var time = parseInt(seconds);
+      var h = 0;
+      var m = 0;
+      var s = 0;
+      if (time > 60) {
+        m = parseInt(time / 60);
+        s = parseInt(time % 60);
+        if (m > 60) {
+          h = parseInt(m / 60);
+          m = parseInt(m % 60);
+        } else if (m == 60) {
+          h = 1;
+          m = 0;
+        }
+      } else if (time < 60) {
+        s = time;
+      } else if (time == 60) {
+        m = 1
+      }
+      h < 10 ? h = "0" + h : "";
+      m < 10 ? m = "0" + m : "";
+      s < 10 ? s = "0" + s : "";
+
+      return h + ":" + m + ":" + s;
+
+      // 解法2：
+      var pad = function (x) { return (x < 10) ? "0" + x : x; }
+      return pad(parseInt(seconds / (60 * 60))) + ":" +
+        pad(parseInt(seconds / 60 % 60)) + ":" +
+        pad(seconds % 60)
+
+      // 解法3：
+      return [seconds / 3600, seconds % 3600 / 60, seconds % 60].map(function (v) {
+        v = Math.floor(v).toString();
+        return v.length == 1 ? '0' + v : v;
+      }).join(':');
+    }
+    // console.log(humanReadable(3600))
+
+
+    /* 12、求和
+        sum_pairs([4, 3, 2, 3, 4],         6)
+        #          ^-----^         4 + 2 = 6, indices: 0, 2 *
+        #             ^-----^      3 + 3 = 6, indices: 1, 3
+        #                ^-----^   2 + 4 = 6, indices: 2, 4
+        #  * entire pair is earlier, and therefore is the correct answer== [4, 2]
+    */
+
+    var sum_pairs = function (ints, s) {
+      for (var i = 0; i < ints.length; i++) {
+        for (var j = i + 1; j < ints.length; j++) {
+          if (ints[i] + ints[j] == s) {
+            return [ints[i], ints[j]]
+          }
+        }
       }
     }
-    return num;
-  }
 
-  console.log(dontGiveMeFive(1,9))
+    // console.log(sum_pairs([10,5,2,3,7,5],10));
 
-  /*
-    7kyu
-    城市公交车，函数内接收一条公车路线 [] , 路线内每个站上下车的人数都会记录在数组里
-    求到终点站时还有多少人在车上 
-    例：[10,0] 上车人数为10 人  下车人数为0 
-  */
-  function busNum (busStops){
-    // Good Luck!
-    let num = 0
-    let count = function(arr){return arr[0] - arr[1]}
-    busStops.map(item => {num += count(item)});
-    return num
+    /* 13、
+        "hello case".camelCase() => HelloCase
+        "camel case word".camelCase() => CamelCaseWord
+    */
 
-    //解法2：
-    const number = busStops => busStops.reduce((p,n) => p+n[0]-n[1],0)
-    const number = (busStops) => busStops.reduce((rem, [on, off]) => rem + on - off, 0);
-    return busStops.map(x => x[0] - x[1]).reduce( (x, y) => x + y);
-  }
+    String.prototype.camelCase = function () {
+      return this.split(" ").map(item => {
+        return item.substring(0, 1).toUpperCase() + item.substring(1)
+      }).join("");
 
-  console.log(busNum([[10,0],[3,5],[5,8]]))
+      //解法2： 
+      return this.split(' ').map(function (word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }).join('');
+
+      // 解法3:
+      return this.replace(/\b\w+\b/g, function (word) {
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
+      }
+      ).split(" ").join("");
+    }
+
+    // console.log("hello case".camelCase())
+
+
+    /* 14
+        实现一个方法，限定数组中元素出现的次数，第一个参数为数组，第二个参数为限制数组中元素出现的最多次数，要求不改变原数组的排序
+        deleteNth ([1,1,1,1],2) // return [1,1]
+        deleteNth ([20,37,20,21],1) // return [20,37,21]
+    */
+
+    function deleteNth(arr, x) {
+      var cache = {};
+      return arr.filter(function (n) {
+        cache[n] = (cache[n] || 0) + 1;
+        return cache[n] <= x;
+      });
+
+      // 解法2：
+      var obj = {}
+      return arr.filter(function (number) {
+        obj[number] = obj[number] ? obj[number] + 1 : 1
+        return obj[number] <= x
+      })
+
+      //解法3：
+      let newArr = [];
+      let lastArr = [];
+
+      for (let i = 0; i < arr.length; i++) {
+        if (newArr.indexOf(arr[i]) < 0) {
+          newArr.push(arr[i]);
+        }
+      }
+      let contorlArr = newArr.map(item => {
+        return { name: item, num: 0 }
+      });
+
+      for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < contorlArr.length; j++) {
+          if (contorlArr[j].name == arr[i] && contorlArr[j].num < n) {
+            lastArr.push(arr[i]);
+            contorlArr[j].num++
+          }
+        }
+      }
+      return lastArr
+    }
+
+    // console.log(deleteNth([1,1,1,1],2));
+
+    /* 15、
+        字谜游戏：方法内传入两个参数，第二个参数是第一个参数重新排列顺序来产生新词则返回true
+        isAnagram("foefet","toffee") -> true
+        isAnagram("Buckethead","DeathCubeK") -> true
+    */
+    var isAnagram = function (test, original) {
+      return test.toLowerCase().split("").sort().join("")
+        === original.toLowerCase().split("").sort().join("")
+    };
+
+    // console.log(isAnagram("Twoo", "WooT"))
+
+    /* 16、实现一个方法，于数组中寻找某个值作为分割的界点，使得该值左右两边的数相加相等
+        [1,2,3,4,3,2,1]   -> 返回下标 3
+        [1,100,50,-51,1,1]   -> 返回下标 1
+    */
+    function findEvenIndex(arr) {
+
+      for (var i = 1; i < arr.length - 1; i++) {
+        if (arr.slice(0, i).reduce((a, b) => a + b) === arr.slice(i + 1).reduce((a, b) => a + b)) {
+          return i;
+        }
+      }
+      return -1;
+
+      //解法2   兼容下标0
+      // let sum = (pre,curr) => pre + curr
+      // for(let index=1; index<arr.length; index++) {
+      //     let leftTotal = arr.slice(0,index).reduce((sum),0)
+      //     let rightTotal = arr.slice(index + 1).reduce(sum,0)
+      //     if(leftTotal === rightTotal) return index
+      // }
+      // return -1
+
+      //解法3   兼容下标0
+      let cacheLeft = 0
+      let cacheRight = 0
+      let especially = ""
+      let sum = (pre, curr) => pre + curr
+      for (let index = 0; index < arr.length; index++) {
+        let leftTotal = cacheLeft ? (cacheLeft += arr[index - 1]) : (cacheLeft += arr.slice(0, index).reduce(sum, 0))
+        let rightTotal = cacheRight ? (cacheRight -= arr[index]) : (cacheRight += arr.slice(index + 1).reduce(sum, 0))
+        if (leftTotal === rightTotal) return index
+      }
+      return -1
+    }
+
+    // console.log(findEvenIndex([20,10,-80,10,10,15,35]))
+
+    /* 17、
+        求一个数组中除去一个最高值和一个最低值的和。
+        { 6, 2, 1, 8, 10 } => 16
+        { 1, 1, 11, 2, 3 } => 6
+        思路: 直接全部相加，再减去最大值和最小值
+    */
+
+    function sumArray(array) {
+      var max = Math.max.apply(null, array);
+      var min = Math.min.apply(null, array);
+      var total = array.reduce((pre, cuttrent) => {
+        return pre += cuttrent;
+      })
+      return total - max - min
+    }
+
+    // console.log(sumArray([1, 1, 11, 2, 3]))
+
+    /* 18、
+        编写一个方法，传入一个字符串参数，返回一个由"()"组成的新字符串;
+        如字符串内无该字符的重复项则返回"("  如有重复项则返回 ")"
+        (忽略大小写)
+        "din"      =>  "((("
+        "recede"   =>  "()()()"
+        "Success"  =>  ")())())"
+        "(( @"     =>  "))((" 
+    */
+
+    function duplicateEncode(word) {
+      var str = "";
+      word = word.toLowerCase();
+      for (let item of word) {
+        str += word.indexOf(item) === word.lastIndexOf(item) ? '(' : ')'
+      }
+      return str
+
+      // 解法2：
+      word = word.toLowerCase();
+      return word.replace(/./g, m => word.indexOf(m) == word.lastIndexOf(m) ? '(' : ')');
+
+      // 解法3：
+      return word
+        .toLowerCase()
+        .split('')
+        .map(function (a, i, w) {
+          return w.indexOf(a) == w.lastIndexOf(a) ? '(' : ')'
+        })
+        .join('');
+    }
+
+    // console.log(duplicateEncode("Success"))
+
+
+    /* 19、 给定连续奇数的三角形，据索引计算该行的和
+                   1
+                3     5
+            7     9    11
+        13    15    17    19
+     21    23    25    27    29
+     rowSumOddNumbers(1); // 1
+     rowSumOddNumbers(2); // 3 + 5 = 8
+     推导公式: 每行第一个数为 n(n-1)+1,第n行就有n个数，依次加2
+    */
+
+    function rowSumOddNumbers(n) {
+
+      // 明白版
+      var leftSum = n * (n - 1) + 1;
+      var total = 0;
+      for (var i = 0; i < n; i++) {
+        total += leftSum;
+        leftSum += 2;
+      }
+      return total
+
+      // 高端局
+      var sum = n * (n - 1) + 1;
+      var num = sum + n - 1;
+      return n * num;
+
+
+      // 王者局
+      return Math.pow(n, 3);
+      // return n*n*n
+      //let rowSumOddNumbers = n => n ** 3;
+    }
+
+    // rowSumOddNumbers(3)
+
+    /* 20、 编写一个方法，去除字符串中所有元音字母
+        "This website is for losers LOL!" -> "Ths wbst s fr lsrs LL!"
+    
+    */
+    function disemvowel(str) {
+      return str.replace(/[aeiou]/gi, '');
+    }
+
+    console.log(disemvowel("This website is for losers LOL!"))
+
+
+    /* 21、现有门票25元一张，假设每个购票的人手中都有单一的100、50、25元
+        初始时售票员手上无余钱，如该队列内售票员可以把钱找开，每个人买到一张票则返回true, 否则返回false
+        tickets([25, 25, 50]) // => YES 
+        tickets([25, 100]) // => NO.
+    */
+    function tickets(peopleInLine) {
+
+    }
 
 
 
-</script>
+
+
+
+
+
+
+
+
+
+  </script>
 </body>
+
 </html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>面向对象弹幕效果</title>
+    <style>
+        .container{width:800px;margin:0 auto;padding-bottom:10px;background-color:#dfdfdf;}
+        #barrage{position:relative;height:600px;margin-bottom:10px;background:#000 ;background-size:cover;overflow:hidden;}
+        #barrage .bar-item{position:absolute;left:100%;white-space:nowrap;}
+        #msg{margin-left:10px;width:400px;height:30px;border:1px solid #999;border-right:none;box-sizing:border-box;vertical-align:middle;}
+        #msg+button{padding:0 10px;height:30px;vertical-align:middle;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="barrage"></div>
+        <input type="text" id="msg"><button>发送</button>
+    </div>
+<script>
+/**
+ * [封装生成一个范围内的随机整数]
+ * @param  {Number} min [范围最小值]
+ * @param  {Number} max [范围内最大值]
+ * @return {Number}     [返回随机整数]
+ */
+function randomNumber(min,max){
+	return parseInt(Math.random()*(max-min+1)) + min
+}
+
+/**
+ * [封装生成随机颜色]
+ * @return {String} [返回rgb颜色字符串]
+ */
+ function randomColor(){
+	var r = parseInt(Math.random()*256);
+	var g = parseInt(Math.random()*256);
+	var b = parseInt(Math.random()*256);
+	return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+    
+document.addEventListener("DOMContentLoaded",() => {
+        
+    let page = {
+        init() { //初始化
+            this.ele = document.querySelector(".container");
+            this.view = document.querySelector("#barrage");
+            this.msg = document.querySelector("#msg");
+            this.button = document.querySelector("button");
+            this.button.onclick = () => {
+                this.send();
+            }
+            document.onkeyup = e => {
+                if(e.keyCode === 13) {
+                    this.send()
+                }
+            }
+        },
+        send() { //发送
+            let msg = this.msg.value;
+            new Barrage(msg);
+            this.msg.value = "";
+            this.msg.focus();
+        }
+    }
+
+
+    function Barrage(msg) {
+        //属性写在构造函数
+        this.color = randomColor();
+        this.speed = randomNumber(-2,-8);
+        this.fontSize = randomNumber(12,36);
+        this.top = randomNumber(10,page.view.clientHeight - this.fontSize - 10);  //弹幕上下留10空白
+        this.init(msg);
+    }
+    Barrage.prototype.init = function(msg) { //初始化方法
+        let item = document.createElement('span'); //生成节点
+        item.innerText = msg;
+        item.className = 'bar-item';
+        item.style.color = this.color;
+        item.style.top = this.top + 'px';
+        item.style.fontSize = this.fontSize + 'px';
+        page.view.appendChild(item);
+        this.ele = item; //利用this储值传递
+        this.move();
+    }
+    Barrage.prototype.move = function() { //移动方法
+        let item = this.ele;
+        this.timer = setInterval(() => {
+            let current = item.offsetLeft; //当前left值
+            let countLeft = current + this.speed;  //计算left值
+            if(countLeft < -item.offsetWidth) {
+                this.remove();
+            }
+            item.style.left = countLeft + 'px'; 
+        },30)
+    }
+    Barrage.prototype.remove = function() { //移除方法
+        clearInterval(this.timer);
+        this.ele.parentNode.removeChild(this.ele);
+    }
+
+    page.init()
+
+});
+
+
+</script>
+</body>
+</html>
